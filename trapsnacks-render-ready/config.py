@@ -18,10 +18,4 @@ class Config:
     # FR 4 SR-5: minutes before staff are alerted that no rider has accepted an offer.
     NO_RIDER_ALERT_MINUTES = 2
 
-
-import os
-
-database_url =  os.environ.get(
-    "DATABASE_URL",
-    "postgres://", "postgresql://", 1
-)
+    database_url =  os.environ.get("DATABASE_URL","postgres://", "postgresql://", 1)
