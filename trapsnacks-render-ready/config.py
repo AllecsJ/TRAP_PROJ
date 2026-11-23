@@ -1,22 +1,42 @@
+
 import os
 
-
-# config.py
-# Settings for the whole application. Change values here, not inside other files.
-
+# Settings for the whole TrapSnacks application.
 
 class Config:
-    # Used to sign login cookies and protect forms. Change it to any long random text.
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'local-development-only-change-me')
+    # Used to sign login cookies and protect forms.
+    SECRET_KEY = os.environ.get(
+        "SECRET_KEY",
+        "local-development-only-change-me"
+    )
 
-    # The database is one file called trapsnacks.db, created in the "instance" folder.
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL","postgres://", 1)
-    
-    #os.environ.get('DATABASE_URL', 'sqlite:///trapsnacks.db')
+    # Connect to Neon PostgreSQL through Render.
+    # SQLite is used only if DATABASE_URL is not configured.
+    database_url = os.environ.get(
+        "DATABASE_URL",
+        "sqlite:///trapsnacks.db"
+    )
 
-    # FR 4 SR-4: minutes a rider has to pick up an order after accepting it.
+    # Support older PostgreSQL URL formats.
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace(
+            "postgres://", "postgresql://", 1
+        )
+
+    # Use the psycopg PostgreSQL driver.
+    if database_url.startswith("postgresql://"):
+        database_url = database_url.replace(
+            "postgresql://", "postgresql+psycopg://", 1
+        )
+
+    SQLALCHEMY_DATABASE_URI = database_url
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True
+    }
+
+    # Minutes a rider has to pick up an order.
     PICKUP_MINUTES = 12
 
-    # FR 4 SR-5: minutes before staff are alerted that no rider has accepted an offer.
+    # Minutes before staff are alerted about no rider.
     NO_RIDER_ALERT_MINUTES = 2
-
