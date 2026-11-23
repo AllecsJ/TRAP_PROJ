@@ -10,7 +10,9 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'local-development-only-change-me')
 
     # The database is one file called trapsnacks.db, created in the "instance" folder.
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///trapsnacks.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL","postgres://", 1)
+    
+    #os.environ.get('DATABASE_URL', 'sqlite:///trapsnacks.db')
 
     # FR 4 SR-4: minutes a rider has to pick up an order after accepting it.
     PICKUP_MINUTES = 12
@@ -18,4 +20,3 @@ class Config:
     # FR 4 SR-5: minutes before staff are alerted that no rider has accepted an offer.
     NO_RIDER_ALERT_MINUTES = 2
 
-    database_url =  os.environ.get("DATABASE_URL","postgres://", 1)
